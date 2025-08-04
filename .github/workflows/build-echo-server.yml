@@ -79,6 +79,20 @@ jobs:
       registry-password: ${{ secrets.REGISTRY_PASSWORD }}
       #registry-password: ${{ secrets.GITHUB_TOKEN }}
 
+  verify:
+    name: Verify with SLSA
+    needs: [build, provenance]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify with SLSA
+        uses: slsa-framework/slsa-verifier@v2.6.0
+        with:
+          command-name: verify-image
+          command-options: |
+            --image ${{ needs.build.outputs.image }}@${{ needs.build.outputs.digest }}
+            --source-uri github.com/${{ github.repository }}
+            --source-tag ${{ github.ref_name }}
+            
   run:
     needs: [build, provenance]
     runs-on: ubuntu-latest
