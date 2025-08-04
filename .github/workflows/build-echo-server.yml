@@ -87,14 +87,11 @@ jobs:
       - name: Install SLSA verifier
         uses: slsa-framework/slsa-verifier/actions/installer@v2.6.0
       - name: Verify with SLSA
-        uses: slsa-framework/slsa-verifier@v2.6.0
-        with:
-          command-name: verify-image
-          command-options: |
-            --image ${{ needs.build.outputs.image }}@${{ needs.build.outputs.digest }}
-            --source-uri github.com/${{ github.repository }}
+        run: |
+          slsa-verifier verify-image \
+            --image ${{ needs.build.outputs.image }}@${{ needs.build.outputs.digest }} \
+            --source-uri github.com/${{ github.repository }} \
             --source-tag ${{ github.ref_name }}
-            
   run:
     needs: [build, provenance]
     runs-on: ubuntu-latest
