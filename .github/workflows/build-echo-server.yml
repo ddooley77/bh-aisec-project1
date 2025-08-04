@@ -89,11 +89,11 @@ jobs:
       - name: Verify with SLSA
         run: |
           slsa-verifier verify-image \
-            --image ${{ needs.build.outputs.image }}@${{ needs.build.outputs.digest }} \
+            ${{ needs.build.outputs.image }}@${{ needs.build.outputs.digest }} \
             --source-uri github.com/${{ github.repository }} \
             --source-tag ${{ github.ref_name }}
   run:
-    needs: [build, provenance]
+    needs: [build, provenance, verify]
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate Docker
