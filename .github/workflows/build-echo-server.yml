@@ -84,6 +84,8 @@ jobs:
     needs: [build, provenance]
     runs-on: ubuntu-latest
     steps:
+      - name: Install SLSA verifier
+        uses: slsa-framework/slsa-verifier/actions/installer@v2.6.0
       - name: Verify with SLSA
         uses: slsa-framework/slsa-verifier@v2.6.0
         with:
